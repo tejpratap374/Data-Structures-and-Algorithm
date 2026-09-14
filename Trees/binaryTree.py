@@ -75,6 +75,67 @@ def search(node, key):
         if current.right:
             queue.append(current.right)
 
+# Helper function to delete the deepest and rightmost node
+def deleteDeepest(root, d_node):
+    queue = deque([root])
+    while queue:
+        current = queue.popleft()
+        
+        if current == d_node:
+            root = None
+            return
+        
+        # Check right child first since we want to clear the reference
+        if current.right:
+            if current.right == d_node:
+                current.right = None
+                return
+            else:
+                queue.append(current.right)
+
+        if current.left:
+            if current.left == d_node:
+                current.left = None
+                return
+            else:
+                queue.append(current.left)
+
+# Delete FUnction
+def delete(root, target):
+    if not root:
+        return None
+    
+    if root.left is None and root.right is None:
+        if root.key == target:
+            return None
+        else:
+            return root
+    
+    keyNode = None
+    queue = deque([root])
+    current = None
+
+    # Level Order traversal to find the target node
+    while queue:
+        current = queue.popleft()
+        if current.key == target:
+            keyNode = current
+
+        if current.left:
+            queue.append(current.left)
+        if current.right:
+            queue.append(current.right)
+
+    # If the target node is found in the tree, 
+    # then overwrite the target data with the deepest rightmost nodee's data 
+    if keyNode:
+        x = current.key
+        deleteDeepest(root, current)
+        keyNode.key = x
+
+    return root 
+
+
 # root = TreeNode('R')
 nodeA = TreeNode('A')
 nodeB = TreeNode('B')
@@ -97,11 +158,18 @@ nodeC.left.left.right = TreeNode(4)
 
 # print("root.right.left.key: ", root.left.left.key)
 
-print(preOrder(nodeA))
-print(inOrder(nodeA))
-print(postOrder(nodeA))
-print(levelOrder(nodeA))
+preOrder(nodeA)
+print()
+inOrder(nodeA)
+print()
+postOrder(nodeA)
+print()
+levelOrder(nodeA)
+print()
 print(findHeight(nodeA))
 mirrorTree(nodeA)
-print(levelOrder(nodeA))
+levelOrder(nodeA)
+print()
 print("Exists" if search(nodeA, 'F') == True else "Does not exists")
+root = delete(nodeA, 7)
+inOrder(nodeA)
