@@ -31,10 +31,12 @@ def insertAtBegining(tail, data):
     """
     newNode = Node(data)
 
+    # Empty list: the new node points to itself and becomes the only node.
     if tail is None:
         newNode.next = newNode
         return newNode
 
+    # Insert before the current head while keeping the tail pointer unchanged.
     newNode.next = tail.next
     tail.next = newNode
     return tail
@@ -47,10 +49,12 @@ def insertAtEnd(tail, data):
     """
     newNode = Node(data)
 
+    # Empty list: create the first circular node.
     if tail is None:
         newNode.next = newNode
         return newNode
 
+    # Attach the new node right after the current tail and update tail to it.
     newNode.next = tail.next
     tail.next = newNode
     return newNode
@@ -87,34 +91,41 @@ def deleteBegining(tail):
 
     If the list contains one element, removing it makes the list empty and returns None.
     """
+    # Empty list: nothing to delete.
     if tail is None:
         print("List is Empty.")
         return None
 
     head = tail.next
 
+    # Only one node exists: removing it leaves the list empty.
     if head is tail:
         return None
 
+    # Move the tail's next pointer to skip the head node.
     tail.next = head.next
     return tail
 
 
 def deleteEnd(tail):
     """Delete the last node of the circular list and return the new tail."""
+    # Empty list: nothing to delete.
     if tail is None:
         print("List is Empty.")
         return None
 
     head = tail.next
 
+    # Single-node list becomes empty.
     if head is tail:
         return None
 
+    # Two-node list: the head becomes the new tail and points to itself.
     if head.next == tail:
         head.next = head
         return head
 
+    # Traverse to the node just before the tail and remove the tail.
     curr = head
     while curr.next != tail:
         curr = curr.next
@@ -153,13 +164,16 @@ def deletePos(tail, pos):
 
 def printList(tail):
     """Print all nodes in the circular list from the head to the tail."""
+    # Empty list: show a clear message.
     if tail is None:
         print("List is Empty.")
         return
 
+    # Start from the head, which is always stored as tail.next.
     head = tail.next
     curr = head
 
+    # Keep printing until we loop back to the head.
     while True:
         print(f"{curr.data}", end=" -> ")
         if curr.next == head:
